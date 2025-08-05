@@ -1,4 +1,9 @@
+import { useContext } from "react";
+import noteContext from "../context/notes/Notecontext";
+
 function Noteitem(props) {
+  const { deleteNote } = useContext(noteContext);
+
   const { eachnote } = props;
   return (
     <div className="col-md-4">
@@ -13,11 +18,17 @@ function Noteitem(props) {
             expedita rem!
           </p>
           <button type="button" className="btn btn-outline-success mx-2">
-            <i class="fa-solid fa-pen-to-square"></i> edit 
+            <i className="fa-solid fa-pen-to-square"></i> edit
           </button>
-          <button type="button" className="btn btn-outline-danger mx-2">
-            <i class="fa-solid fa-trash"></i>
-            Delete 
+          <button
+            type="button"
+            className="btn btn-outline-danger mx-2"
+            onClick={() => {
+              deleteNote(eachnote._id);
+            }}
+          >
+            <i className="fa-solid fa-trash"></i>
+            Delete
           </button>
         </div>
       </div>
