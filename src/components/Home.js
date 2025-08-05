@@ -1,10 +1,12 @@
 
+import Alert from "./Alert";
 import Notes from "./Notes";
 
 const Home = () => {
 
   return (
     <>
+    <Alert message = "Note deleted successfully"/>
       <div className="my-4 px-5">
         <h2>add the notes</h2>
 
