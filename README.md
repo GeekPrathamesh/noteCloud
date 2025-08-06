@@ -31,7 +31,5 @@ It handles user authentication, note CRUD operations, and token-based access con
 
 - 🧪 Input validation via `express-validator`
 
----
 
-## 📁 Folder Structure
 
