@@ -14,6 +14,11 @@ function Addnote() {
   const handleClick = (e) => {
     e.preventDefault();
     addNote(note.title, note.description, note.tag);
+    setnote({
+    title: "",
+    description: "",
+    tag: "",
+  })
   };
   const onChange = (e) => {
     setnote({ ...note, [e.target.name]: e.target.value });
@@ -33,34 +38,39 @@ function Addnote() {
               type="text"
               className="form-control"
               id="title"
-              name="title"
+              name="title" value={note.title}
               aria-describedby="emailHelp"
-              onChange={onChange}
+              onChange={onChange} 
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="description" className="form-label" >
+              description
+            </label>
+            <input
+              type="text" value={note.description}
+              className="form-control"
+              id="description"
+              name="description"
+              onChange={onChange} 
             />
           </div>
           <div className="mb-3">
             <label htmlFor="description" className="form-label">
-              description
+              Tag
             </label>
             <input
               type="text"
+              value={note.tag}
               className="form-control"
-              id="description"
-              name="description"
+              id="tag"
+              name="tag"
               onChange={onChange}
             />
           </div>
-          <div className="mb-3 form-check">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              id="exampleCheck1"
-            />
-            <label className="form-check-label" htmlFor="exampleCheck1">
-              Check me out
-            </label>
-          </div>
+
           <button
+          disabled={note.title.length<5 || note.description.length<5}
             type="submit"
             className="btn btn-primary"
             onClick={handleClick}

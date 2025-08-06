@@ -35,49 +35,62 @@ const NoteState = (props) => {
 
       body: JSON.stringify({ title, description, tag }),
     });
+    const json = await response.json();
 
-    const noteNew = {
-      _id: "689389fa14c8a5dfe5e4b073",
-      user: "689389fa14c8a5dfe5e4b073",
-      title: title,
-      description: description,
-      tag: tag,
-      date: "2025-08-04T21:31:39.510Z",
-      __v: 0,
-    };
-    setNote([...note, noteNew]); // this is like push but immutable
+    const noteNew = json
+    // setNote([...note, noteNew]); // this is like push but immutable
+    setNote(note.concat(noteNew))
   };
-  const deleteNote = (id) => {
+  const deleteNote = async(id) => {
     //api call
+
+ const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjg5Mzg5ZmExNGM4YTVkZmU1ZTRiMDczIn0sImlhdCI6MTc1NDQ5OTYyOX0.84Ipb_8FNwMeD5NgB7SW3o4F3hWchdA6wulW5-EtyD8",
+      },
+
+    });
+
+    const json = response.json()
+    console.log(json)
+
+
     console.log(id);
     const newNotes = note.filter((eachnote) => {
       return eachnote._id !== id;
     });
     setNote(newNotes);
   };
-  const editNote = async (id, title, description, tag) => {
-    // api call
+  const editNote = async (id ,title,description,tag ) => {
+    // api call /api/notes/updatenote
 
-    // const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-    //   method: "PUT",
-    //   headers:{
-    //     'Content-Type':'application/json',
-    //     'auth-token':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjg5Mzg5ZmExNGM4YTVkZmU1ZTRiMDczIn0sImlhdCI6MTc1NDQ5OTYyOX0.84Ipb_8FNwMeD5NgB7SW3o4F3hWchdA6wulW5-EtyD8'
-    //   },
+    await fetch(`${host}/api/notes/updatenote/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjg5Mzg5ZmExNGM4YTVkZmU1ZTRiMDczIn0sImlhdCI6MTc1NDQ5OTYyOX0.84Ipb_8FNwMeD5NgB7SW3o4F3hWchdA6wulW5-EtyD8",
+      },
+      body: JSON.stringify({ title, description, tag }),
 
-    //   body: JSON.stringify({title,description,tag}),
-    // });
 
-    // const json = response.json();
+    });
 
-    for (let index = 0; index < note.length; index++) {
-      const element = note[index];
-      if (element._id === id) {
-        element.title = title;
-        element.description = description;
-        element.tag = tag;
-      }
-    }
+    // const json = response.json()
+    // console.log(json)
+
+
+    // for (let index = 0; index < note.length; index++) {
+    //   const element = note[index];
+    //   if (element._id === id) {
+    //     element.title = title;
+    //     element.description = description;
+    //     element.tag = tag;
+    //   }
+    // }
   };
 
   return (
