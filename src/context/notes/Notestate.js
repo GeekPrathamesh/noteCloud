@@ -14,7 +14,7 @@ const NoteState = (props) => {
       headers: {
         "Content-Type": "application/json",
         "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjg5Mzg5ZmExNGM4YTVkZmU1ZTRiMDczIn0sImlhdCI6MTc1NDQ5OTYyOX0.84Ipb_8FNwMeD5NgB7SW3o4F3hWchdA6wulW5-EtyD8",
+          localStorage.getItem("token"),
       },
     });
     const json = await response.json();
@@ -30,7 +30,7 @@ const NoteState = (props) => {
       headers: {
         "Content-Type": "application/json",
         "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjg5Mzg5ZmExNGM4YTVkZmU1ZTRiMDczIn0sImlhdCI6MTc1NDQ5OTYyOX0.84Ipb_8FNwMeD5NgB7SW3o4F3hWchdA6wulW5-EtyD8",
+          localStorage.getItem("token"),
       },
 
       body: JSON.stringify({ title, description, tag }),
@@ -49,12 +49,12 @@ const NoteState = (props) => {
       headers: {
         "Content-Type": "application/json",
         "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjg5Mzg5ZmExNGM4YTVkZmU1ZTRiMDczIn0sImlhdCI6MTc1NDQ5OTYyOX0.84Ipb_8FNwMeD5NgB7SW3o4F3hWchdA6wulW5-EtyD8",
+          localStorage.getItem("token"),
       },
 
     });
 
-    const json = response.json()
+    const json = await response.json()
     console.log(json)
 
 
@@ -72,7 +72,7 @@ const NoteState = (props) => {
       headers: {
         "Content-Type": "application/json",
         "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjg5Mzg5ZmExNGM4YTVkZmU1ZTRiMDczIn0sImlhdCI6MTc1NDQ5OTYyOX0.84Ipb_8FNwMeD5NgB7SW3o4F3hWchdA6wulW5-EtyD8",
+          localStorage.getItem("token"),
       },
       body: JSON.stringify({ title, description, tag }),
 
@@ -93,9 +93,50 @@ const NoteState = (props) => {
     // }
   };
 
+  const loginUser = async (email, password) => {
+    const response = await fetch(`${host}/api/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const json = await response.json();
+    console.log(json);
+    if(json.success){
+      //redirect
+      localStorage.setItem("token",json.token)
+      return true;
+    }
+    else{
+            return false;
+
+    }
+  };
+  const createUser = async (name , email, password) => {
+    const response = await fetch(`${host}/api/auth/createuser`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name , email, password }),
+    });
+
+    const json = await response.json();
+    console.log(json);
+    if(json.success){
+      //redirect
+      localStorage.setItem("token",json.token);
+      return true;
+
+    }
+
+  };
+
   return (
     <noteContext.Provider
-      value={{ note, setNote, addNote, deleteNote, editNote, getNotes }}
+      value={{ note, setNote, addNote, deleteNote, editNote, getNotes , loginUser , createUser }}
     >
       {props.children}
     </noteContext.Provider>

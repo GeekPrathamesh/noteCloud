@@ -1,9 +1,9 @@
 import Notes from "./Notes";
 
-const Home = () => {
+const Home = ({setAlert}) => {
   return (
     <>
-      <Notes />
+      <Notes setAlert={setAlert} />
     </>
   );
 };

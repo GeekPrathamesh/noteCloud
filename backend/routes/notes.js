@@ -86,6 +86,7 @@ router.put("/updatenote/:id", fetchuser, async (req, res) => {
 //obiviously login must required bhai route 4
 
 router.delete("/deletenote/:id", fetchuser, async (req, res) => {
+  let success = false;
   try {
     let note = await Notes.findById(req.params.id);
     if (!note) {
@@ -99,9 +100,10 @@ router.delete("/deletenote/:id", fetchuser, async (req, res) => {
     //delete note
 
     await Notes.findByIdAndDelete(req.params.id);
-    res.json({success:"note deleted success",note:note})
+    success = true;
+    res.json({success , success:"note deleted success",note:note})
   } catch (error) { console.error(error.message);
-    res.status(500).send("Server Error hai ruk abh");}
+    res.status(500).send(success , "Server Error hai ruk abh");}
 });
 
 module.exports = router;

@@ -1,8 +1,7 @@
-import Alert from "./Alert";
 import { useContext, useState } from "react";
 import noteContext from "../context/notes/Notecontext";
 
-function Addnote() {
+function Addnote({setAlert}) {
   const { addNote } = useContext(noteContext);
 
   const [note, setnote] = useState({
@@ -19,13 +18,14 @@ function Addnote() {
     description: "",
     tag: "",
   })
+      setAlert("added note successfully","success")
+
   };
   const onChange = (e) => {
     setnote({ ...note, [e.target.name]: e.target.value });
   };
   return (
     <div>
-      <Alert message="Note deleted successfully" />
       <div className="my-4 px-5">
         <h2>add the notes</h2>
 

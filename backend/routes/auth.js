@@ -19,19 +19,21 @@ router.post(
   ],
   async (req, res) => {
     //if errors in input data return bad request and errors
-
+    let success;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      success = false;
+      return res.status(400).json({ success, errors: errors.array() });
     }
 
     try {
       //check first that user with email exists already
       let user = await User.findOne({ email: req.body.email });
       if (user) {
+        success = false;
         return res
           .status(400)
-          .json({ error: "user with that email already exists" });
+          .json({ success, error: "user with that email already exists" });
       }
 
       //salt is generated
@@ -50,10 +52,12 @@ router.post(
 
       const obj = { user: { id: user.id } };
       var token = jwt.sign(obj, JWT_secret);
-      res.json({ token });
+      success = true;
+      res.json({ success, token });
     } catch (error) {
+      success = false;
       console.error(error.message);
-      res.status(500).send("some error occur at route 1");
+      res.status(500).send("some error occur at route 1", success);
     }
   }
 );
@@ -76,20 +80,23 @@ router.post(
 
     const { email, password } = req.body;
     try {
+      let success;
       let user = await User.findOne({ email });
       if (!user) {
+        success = false;
         return res
           .status(400)
-          .json({ error: "enter correct user credentials" });
+          .json({ success, error: "enter correct user credentials" });
       }
 
       //verifying the password
 
       const passMatch = await bcrypt.compare(password, user.password);
       if (!passMatch) {
+        success = false;
         return res
           .status(400)
-          .json({ error: "enter valid password credentials" });
+          .json({ success, error: "enter valid password credentials" });
       }
 
       const obj = {
@@ -99,9 +106,10 @@ router.post(
       };
 
       //assgning auth token
-
       var token = jwt.sign(obj, JWT_secret);
-      res.json({ token });
+      success = true;
+
+      res.json({ success, token });
     } catch (error) {
       console.error(error.message);
       res.status(500).send("some error occur at route 2");
